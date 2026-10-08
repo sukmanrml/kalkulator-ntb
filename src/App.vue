@@ -31,7 +31,7 @@ const { input, result, issues, text, started, categoryItems, kbliItems, ntbData,
     </main>
 
     <footer class="no-print mx-auto max-w-6xl px-4 pb-10 text-sm text-muted-foreground">
-      <p>Batas kewajaran berasal dari berkas Kalkulator NTB_SharedV1.1. Alat ini membantu pemeriksaan awal, bukan keputusan akhir. Angka tidak dikirim atau disimpan di mana pun.</p>
+      <p>Rumus dan batas kewajaran bersumber dari berkas Kalkulator NTB_SharedV1.1 milik BPS Provinsi Sulawesi Tengah. Definisi omzet, output, dan nilai tambah mengikuti petunjuk FASIH Pendataan SE 2026. Alat ini membantu pemeriksaan awal dan bukan terbitan resmi BPS. Angka tidak dikirim atau disimpan di mana pun.</p>
     </footer>
   </div>
 </template>

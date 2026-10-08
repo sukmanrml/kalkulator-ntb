@@ -44,7 +44,8 @@ export function calculate(input: NtbInput, data: NtbData): NtbResult {
   const expenses: Record<ExpenseKey, number> = {
     wages: n(input.wages), production: n(input.production), purchases: n(input.purchases), operating: n(input.operating), nonOperating: n(input.nonOperating),
   };
-  const revenue = n(input.revenue);
+  // Omzet (FASIH SE2026): 27a, or 31a x 12 for a business that started operating in 2026.
+  const revenue = input.startedThisYear ? n(input.monthlyRevenue) * 12 : n(input.revenue);
 
   // C6 and D6: wage per worker per year
   const wagePerWorker = isNum(workers) && workers > 0 ? expenses.wages / workers : null;
@@ -107,6 +108,7 @@ export function calculate(input: NtbInput, data: NtbData): NtbResult {
   }
 
   return {
+    turnover: revenue,
     categoryTitle: data.categories.find((c) => c.code === category)?.title ?? null,
     kbliTitle: data.kbli.find((k) => k.c === input.kbli)?.t ?? null,
     sizeClass: sizeClass(workers, data.sizeClasses),

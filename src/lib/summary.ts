@@ -38,6 +38,7 @@ export function summaryText(result: NtbResult, input: NtbInput): string {
     `Total pengeluaran: ${rp(result.totalExpense)}`,
     `Total pendapatan: ${rp(result.totalRevenue)}`,
     `Selisih: ${rp(result.profit)}${result.profitLabel ? ` (${result.profitLabel})` : ''}`,
+    `Omzet: ${rp(result.turnover)}${input.startedThisYear ? ' (31a x 12)' : ''}`,
     `Output: ${rp(result.output)}`,
     `Nilai tambah: ${rp(result.valueAdded)}`,
     `Rasio NTB: ${result.ntbRatio !== null ? `${pct(result.ntbRatio)} (${statusText(result.ntbStatus)}, rentang ${range})` : '-'}`,

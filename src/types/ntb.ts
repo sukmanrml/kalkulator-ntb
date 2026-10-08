@@ -50,8 +50,12 @@ export interface NtbInput {
   operating: number | null;
   /** 26e */
   nonOperating: number | null;
-  /** 27a */
+  /** 27a: value of production, sales or income of goods and services for a year */
   revenue: number | null;
+  /** True for a business that started operating in 2026: omzet is then 31a x 12 instead of 27a. */
+  startedThisYear: boolean;
+  /** 31a: the same value for one month, used when startedThisYear is true */
+  monthlyRevenue: number | null;
   /** 27b */
   otherRevenue: number | null;
 }
@@ -59,6 +63,8 @@ export interface NtbInput {
 export type RatioStatus = 'in' | 'out' | null;
 
 export interface NtbResult {
+  /** Omzet: 27a, or 31a x 12 for a business that started in 2026. */
+  turnover: number;
   categoryTitle: string | null;
   kbliTitle: string | null;
   sizeClass: string | null;

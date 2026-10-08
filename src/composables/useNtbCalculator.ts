@@ -7,7 +7,7 @@ import type { NtbData, NtbInput } from '@/types/ntb';
 const ntbData = data as unknown as NtbData;
 
 const EMPTY: NtbInput = {
-  category: null, kbli: null, workers: null, wages: null, production: null, purchases: null, operating: null, nonOperating: null, revenue: null, otherRevenue: null,
+  category: null, kbli: null, workers: null, wages: null, production: null, purchases: null, operating: null, nonOperating: null, revenue: null, startedThisYear: false, monthlyRevenue: null, otherRevenue: null,
 };
 
 // The sample of the original workbook.

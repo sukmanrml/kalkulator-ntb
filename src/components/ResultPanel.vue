@@ -52,7 +52,7 @@ const rangeText = (r: NtbResult) => (r.ntbRange ? `${pct(r.ntbRange[0])} sampai 
           <div class="rounded-lg border bg-secondary/50 p-3">
             <p class="text-xs tracking-wide text-muted-foreground uppercase">Total pendapatan</p>
             <p class="mt-1 text-lg font-semibold tabular-nums">{{ rp(result.totalRevenue) }}</p>
-            <p class="text-xs text-muted-foreground">27a dan 27b</p>
+            <p class="text-xs text-muted-foreground">omzet dan 27b</p>
           </div>
           <div class="rounded-lg border p-3" :class="result.profit < 0 ? 'border-warning/30 bg-warning-soft text-warning' : 'bg-secondary/50'">
             <p class="text-xs tracking-wide uppercase" :class="result.profit < 0 ? '' : 'text-muted-foreground'">Selisih</p>
@@ -77,8 +77,9 @@ const rangeText = (r: NtbResult) => (r.ntbRange ? `${pct(r.ntbRange[0])} sampai 
         <section aria-labelledby="nilai-tambah">
           <h3 id="nilai-tambah" class="text-sm font-semibold text-primary">Nilai tambah</h3>
           <dl class="divide-y">
-            <ResultRow label="Output" hint="(27a − 26c, biaya pembelian barang yang terjual)">{{ rp(result.output) }}</ResultRow>
-            <ResultRow label="Nilai tambah" hint="(27a − 26b − 26c − 26d)">{{ rp(result.valueAdded) }}</ResultRow>
+            <ResultRow label="Omzet" :hint="input.startedThisYear ? '(31a × 12)' : '(27a)'">{{ rp(result.turnover) }}</ResultRow>
+            <ResultRow label="Output" hint="(omzet − 26c, biaya pembelian barang yang terjual)">{{ rp(result.output) }}</ResultRow>
+            <ResultRow label="Nilai tambah" hint="(omzet − 26b − 26c − 26d)">{{ rp(result.valueAdded) }}</ResultRow>
             <ResultRow label="Rasio NTB" hint="(nilai tambah ÷ output)">
               <template v-if="result.ntbRatio !== null">{{ pct(result.ntbRatio) }} <StatusBadge :status="result.ntbStatus" /></template>
               <template v-else>-</template>

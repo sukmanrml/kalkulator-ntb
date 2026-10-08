@@ -4,7 +4,7 @@ import type { NtbData, NtbInput } from '@/types/ntb';
 import { calculate, pct, rp, sizeClass } from './ntb';
 
 const ntb = data as unknown as NtbData;
-const empty: NtbInput = { category: null, kbli: null, workers: null, wages: null, production: null, purchases: null, operating: null, nonOperating: null, revenue: null, otherRevenue: null };
+const empty: NtbInput = { category: null, kbli: null, workers: null, wages: null, production: null, purchases: null, operating: null, nonOperating: null, revenue: null, startedThisYear: false, monthlyRevenue: null, otherRevenue: null };
 // The sample in the workbook: category A, KBLI 01111, 3 workers, 26a 9.000.000, 26b 10.000.000, 26d 500.000, 27a 36.000.000.
 const sample: NtbInput = { ...empty, category: 'A', kbli: '01111', workers: 3, wages: 9_000_000, production: 10_000_000, operating: 500_000, revenue: 36_000_000 };
 
@@ -103,6 +103,17 @@ describe('calculate', () => {
     expect(r.wageStatus).toBe('out'); // 87,21%, above 60%
     expect(r.sizeClass).toBe('Kecil');
     expect(calculate({ ...reported, category: 'Q' }, ntb).ntbRange).toEqual([0.27, 0.82]);
+  });
+
+  it('uses 31a x 12 as omzet for a business that started in 2026', () => {
+    const started = { ...sample, startedThisYear: true, monthlyRevenue: 3_000_000, revenue: 99_000_000 }; // 27a is ignored
+    const r = calculate(started, ntb);
+    expect(r.turnover).toBe(36_000_000);
+    expect(r.output).toBe(36_000_000);
+    expect(r.valueAdded).toBe(25_500_000);
+    expect(r.totalRevenue).toBe(36_000_000);
+    expect(calculate({ ...started, otherRevenue: 1_000_000 }, ntb).totalRevenue).toBe(37_000_000);
+    expect(calculate({ ...sample, startedThisYear: false, monthlyRevenue: 5 }, ntb).turnover).toBe(36_000_000); // 31a is ignored
   });
 
   it('does not crash on empty input', () => {

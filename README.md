@@ -1,6 +1,6 @@
 # Kalkulator NTB
 
-Kalkulator NTB memeriksa apakah Nilai Tambah Bruto, upah, dan komponen biaya sebuah usaha masuk akal untuk kategori KBLI-nya. Aplikasi ini memindahkan berkas Excel *Kalkulator NTB_SharedV1.1* ke situs web, sehingga petugas cukup membuka tautan tanpa menyalin berkas.
+Kalkulator NTB memeriksa apakah Nilai Tambah Bruto, upah, dan komponen biaya sebuah usaha masuk akal untuk kategori KBLI-nya. Aplikasi ini memindahkan berkas Excel *Kalkulator NTB_SharedV1.1* dari BPS Provinsi Sulawesi Tengah ke situs web, sehingga petugas cukup membuka tautan tanpa menyalin berkas.
 
 Alamat situs: https://sukmanrml.github.io/kalkulator-ntb/
 
@@ -11,7 +11,7 @@ Perhitungan berjalan di peramban Anda. Angka yang diisi tidak dikirim ke server 
 ## Cara memakai
 
 1. Pilih kategori KBLI dan KBLI 5 digit. Kedua daftar bisa dicari dengan kode atau kata, misalnya `47111` atau `jagung`. Memilih KBLI mengisi kategorinya.
-2. Isi banyaknya tenaga kerja, pengeluaran (rincian 26a sampai 26e), dan pendapatan (27a dan 27b). Semua angka dalam rupiah setahun.
+2. Isi banyaknya tenaga kerja, pengeluaran (rincian 26a sampai 26e), dan pendapatan (27a dan 27b). Semua angka dalam rupiah setahun. Untuk usaha yang mulai beroperasi tahun 2026, nyalakan saklar "Usaha mulai beroperasi tahun 2026" lalu isi rincian 31a (nilai sebulan). Aplikasi mengalikannya dengan 12.
 3. Baca hasilnya di panel kanan. Hasil berubah setiap kali Anda mengetik. Tombol "Salin hasil" menyalin ringkasannya sebagai teks, misalnya untuk ditempel ke catatan pemeriksaan.
 
 Tombol "Isi contoh" mengisi contoh dari berkas Excel, dan "Kosongkan" menghapus semua isian.
@@ -23,18 +23,26 @@ Contoh bawaan: kategori A (pertanian), KBLI 01111 pertanian jagung, 3 tenaga ker
 | Hasil | Nilai | Keterangan |
 |---|---|---|
 | Upah per tenaga kerja | Rp3.000.000 setahun | Di bawah batas Rp12.000.000. Muncul peringatan agar upah dan jumlah tenaga kerja diperiksa kembali, karena setara Rp250.000 per bulan. |
-| Nilai tambah | Rp25.500.000 | Rp36.000.000 dikurangi biaya produksi dan operasional. |
+| Nilai tambah | Rp25.500.000 | Omzet Rp36.000.000 dikurangi biaya produksi dan operasional. Biaya pembelian (26c) bernilai nol pada contoh ini. |
 | Rasio NTB | 70,83% | Masih dalam rentang kategori A, yaitu 51% sampai 94%. |
 | Rasio upah | 35,29% | Di luar rentang 40% sampai 60%. Saran upah: Rp3.422.100 sampai Rp10.266.300. |
+
+## Istilah
+
+Definisi mengikuti petunjuk di FASIH Pendataan SE 2026 (Badan Pusat Statistik).
+
+- **Omzet** adalah nilai produksi, penjualan, atau pendapatan barang dan jasa. Untuk usaha yang beroperasi sebelum 2026, nilainya rincian 27a. Untuk usaha yang mulai beroperasi tahun 2026, nilainya rincian 31a dikali 12.
+- **Output** adalah omzet dikurangi biaya pembelian barang yang terjual (26c).
+- **Nilai tambah** adalah omzet dikurangi biaya produksi (26b), biaya pembelian barang yang terjual (26c), dan biaya operasional (26d). Biaya pembelian dikurangkan satu kali, lewat output. Hasilnya sama dengan rumus berkas Excel.
 
 ## Aturan pemeriksaan
 
 | Perhitungan | Rumus dan batas |
 |---|---|
 | Upah per tenaga kerja setahun | 26a dibagi tenaga kerja. Wajar antara Rp12.000.000 dan Rp144.000.000. |
-| Total pengeluaran | 26a + 26b + 26c + 26d + 26e. Jika melebihi total pendapatan, komponen terbesar ditandai. |
-| Output | 27a - 26c |
-| Nilai tambah | Output - 26b - 26d, sama dengan 27a - 26b - 26c - 26d. Biaya pembelian (26c) ikut mengurangi nilai tambah lewat output. |
+| Total pengeluaran | 26a + 26b + 26c + 26d + 26e. Jika melebihi total pendapatan (omzet + 27b), komponen terbesar ditandai. |
+| Output | Omzet - 26c |
+| Nilai tambah | Output - 26b - 26d, sama dengan omzet - 26b - 26c - 26d. |
 | Rasio NTB | Nilai tambah dibagi output, dibandingkan dengan rentang kategori. |
 | Rasio upah | 26a dibagi nilai tambah. Wajar antara 40% dan 60%. |
 | Saran upah | Nilai tambah dikali persentase upah kategori, dari batas bawah sampai batas atas. |
@@ -45,10 +53,11 @@ Dari 22 kategori KBLI (A sampai V), 20 punya rentang rasio NTB. Kategori P tidak
 
 ## Perbedaan dengan berkas Excel
 
-Tiga perilaku berbeda dari Excel:
+Empat perilaku berbeda dari Excel:
 
 - Usaha dengan 20 tenaga kerja atau lebih diklasifikasikan menengah/besar. Di Excel hasilnya "Tidak Valid" karena sel batas maksimumnya kosong.
 - Saran untuk biaya pembelian saat rasio NTB di luar rentang dan tidak melebihi 85% berbunyi "Turunkan Biaya Pembelian Barang dan Jasa". Di Excel tertulis "Turunkan Biaya Operasional", salah salin dari baris di bawahnya.
+- Aplikasi menyediakan saklar untuk usaha yang mulai beroperasi tahun 2026, dengan omzet dari rincian 31a dikali 12. Berkas Excel hanya punya rincian 27a. Arti 31a diambil dari definisi omzet di FASIH.
 - Saran upah tidak muncul jika nilai tambah nol atau negatif. Sebagai gantinya muncul peringatan nilai tambah negatif.
 
 ## Data
@@ -88,6 +97,12 @@ Skrip membangun situs, lalu mendorong isi `dist/` ke cabang `gh-pages` di remote
 
 Batas kewajaran berasal dari berkas sumber dan dipakai untuk pemeriksaan awal. Petugas tetap memutuskan apakah angka sebuah usaha perlu dikonfirmasi ulang ke responden.
 
+## Sumber
+
+- Rumus, batas kewajaran, dan master KBLI berasal dari berkas Excel *Kalkulator NTB_SharedV1.1* buatan BPS Provinsi Sulawesi Tengah.
+- Definisi omzet, output, dan nilai tambah, termasuk rincian 31a untuk usaha baru, berasal dari petunjuk FASIH Pendataan SE 2026 milik Badan Pusat Statistik.
+- Aplikasi web ini alat bantu pemeriksaan dan bukan terbitan resmi BPS.
+
 ## Lisensi
 
-MIT. Lihat berkas `LICENSE`.
+Kode memakai lisensi MIT. Lihat berkas `LICENSE`. Lisensi itu tidak mencakup rumus, batas kewajaran, dan master KBLI di atas, yang tetap bersumber dari BPS.

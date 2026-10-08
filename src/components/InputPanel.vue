@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
 import type { NtbInput } from '@/types/ntb';
 import MoneyField from './MoneyField.vue';
 import SearchableSelect, { type SelectItem } from './SearchableSelect.vue';
@@ -64,7 +65,15 @@ function onWorkers(event: Event) {
 
       <section class="grid gap-4" aria-labelledby="pendapatan">
         <h3 id="pendapatan" class="text-sm font-semibold text-primary">Pendapatan usaha <span class="font-normal text-muted-foreground">Rincian 27</span></h3>
-        <MoneyField v-model="input.revenue" label="27a. Nilai produksi, penjualan, atau pendapatan barang dan jasa" />
+        <div class="flex items-start gap-3 rounded-lg border bg-secondary/40 p-3">
+          <Switch id="started-this-year" v-model="input.startedThisYear" class="mt-0.5" />
+          <div class="grid gap-0.5">
+            <Label for="started-this-year" class="leading-snug">Usaha mulai beroperasi tahun 2026</Label>
+            <p class="text-xs text-muted-foreground">Omzet dihitung dari rincian 31a dikali 12, bukan dari 27a.</p>
+          </div>
+        </div>
+        <MoneyField v-if="input.startedThisYear" v-model="input.monthlyRevenue" label="31a. Nilai produksi, penjualan, atau pendapatan barang dan jasa sebulan" />
+        <MoneyField v-else v-model="input.revenue" label="27a. Nilai produksi, penjualan, atau pendapatan barang dan jasa setahun" />
         <MoneyField v-model="input.otherRevenue" label="27b. Pendapatan lainnya" />
       </section>
     </CardContent>
