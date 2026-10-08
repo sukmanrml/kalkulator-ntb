@@ -77,8 +77,8 @@ const rangeText = (r: NtbResult) => (r.ntbRange ? `${pct(r.ntbRange[0])} sampai 
         <section aria-labelledby="nilai-tambah">
           <h3 id="nilai-tambah" class="text-sm font-semibold text-primary">Nilai tambah</h3>
           <dl class="divide-y">
-            <ResultRow label="Output" hint="(27a − 26c)">{{ rp(result.output) }}</ResultRow>
-            <ResultRow label="Nilai tambah" hint="(output − 26b − 26d)">{{ rp(result.valueAdded) }}</ResultRow>
+            <ResultRow label="Output" hint="(27a − 26c, biaya pembelian barang yang terjual)">{{ rp(result.output) }}</ResultRow>
+            <ResultRow label="Nilai tambah" hint="(27a − 26b − 26c − 26d)">{{ rp(result.valueAdded) }}</ResultRow>
             <ResultRow label="Rasio NTB" hint="(nilai tambah ÷ output)">
               <template v-if="result.ntbRatio !== null">{{ pct(result.ntbRatio) }} <StatusBadge :status="result.ntbStatus" /></template>
               <template v-else>-</template>

@@ -39,6 +39,13 @@ describe('calculate', () => {
     expect(r.expenseTooHigh).toBe(false);
   });
 
+  it('subtracts 26c from nilai tambah through output (27a - 26b - 26c - 26d)', () => {
+    const withPurchases = calculate({ ...sample, purchases: 4_000_000 }, ntb);
+    expect(withPurchases.output).toBe(32_000_000); // 36.000.000 - 4.000.000
+    expect(withPurchases.valueAdded).toBe(21_500_000); // 36.000.000 - 10.000.000 - 4.000.000 - 500.000
+    expect(withPurchases.valueAdded).toBe(calculate(sample, ntb).valueAdded - 4_000_000);
+  });
+
   it('flags a wage per worker outside 12 to 144 million a year, with the monthly figure', () => {
     expect(calculate(sample, ntb).warnings.wagePerWorker).toMatch(/Rp250\.000 PER BULAN/);
     expect(calculate({ ...sample, wages: 60_000_000 }, ntb).warnings.wagePerWorker).toBeUndefined();

@@ -34,7 +34,7 @@ Contoh bawaan: kategori A (pertanian), KBLI 01111 pertanian jagung, 3 tenaga ker
 | Upah per tenaga kerja setahun | 26a dibagi tenaga kerja. Wajar antara Rp12.000.000 dan Rp144.000.000. |
 | Total pengeluaran | 26a + 26b + 26c + 26d + 26e. Jika melebihi total pendapatan, komponen terbesar ditandai. |
 | Output | 27a - 26c |
-| Nilai tambah | Output - 26b - 26d |
+| Nilai tambah | Output - 26b - 26d, sama dengan 27a - 26b - 26c - 26d. Biaya pembelian (26c) ikut mengurangi nilai tambah lewat output. |
 | Rasio NTB | Nilai tambah dibagi output, dibandingkan dengan rentang kategori. |
 | Rasio upah | 26a dibagi nilai tambah. Wajar antara 40% dan 60%. |
 | Saran upah | Nilai tambah dikali persentase upah kategori, dari batas bawah sampai batas atas. |
