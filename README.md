@@ -1,70 +1,93 @@
 # Kalkulator NTB
 
-Alat bantu untuk memeriksa kewajaran **Nilai Tambah Bruto (NTB)**, upah, dan komponen biaya sebuah usaha berdasarkan kategori dan KBLI. Alat ini adalah versi web dari berkas Excel *Kalkulator NTB_SharedV1.1*.
+Kalkulator NTB memeriksa apakah Nilai Tambah Bruto, upah, dan komponen biaya sebuah usaha masuk akal untuk kategori KBLI-nya. Aplikasi ini memindahkan berkas Excel *Kalkulator NTB_SharedV1.1* ke situs web, sehingga petugas cukup membuka tautan tanpa menyalin berkas.
 
-Semua perhitungan berjalan di browser. Angka yang diisi tidak dikirim dan tidak disimpan di mana pun.
+Alamat situs: https://sukmanrml.github.io/kalkulator-ntb/
+
+![Tampilan kalkulator dengan contoh dari berkas Excel](docs/tampilan.png)
+
+Perhitungan berjalan di peramban Anda. Angka yang diisi tidak dikirim ke server mana pun dan tidak disimpan setelah Anda menutup halaman.
 
 ## Cara memakai
 
-1. Pilih **Kategori KBLI** dan **KBLI 5 digit**. Kedua daftar bisa dicari. Memilih KBLI mengisi kategorinya otomatis.
-2. Isi banyaknya tenaga kerja, pengeluaran (rincian 26a sampai 26e) dan pendapatan (27a dan 27b), dalam rupiah setahun.
-3. Hasil muncul di sebelah kanan saat Anda mengetik. Tombol **Salin hasil** menyalin ringkasan sebagai teks.
+1. Pilih kategori KBLI dan KBLI 5 digit. Kedua daftar bisa dicari dengan kode atau kata, misalnya `47111` atau `jagung`. Memilih KBLI mengisi kategorinya.
+2. Isi banyaknya tenaga kerja, pengeluaran (rincian 26a sampai 26e), dan pendapatan (27a dan 27b). Semua angka dalam rupiah setahun.
+3. Baca hasilnya di panel kanan. Hasil berubah setiap kali Anda mengetik. Tombol "Salin hasil" menyalin ringkasannya sebagai teks, misalnya untuk ditempel ke catatan pemeriksaan.
 
-Tombol **Isi contoh** mengisi contoh dari berkas Excel (kategori A, KBLI 01111, 3 tenaga kerja).
+Tombol "Isi contoh" mengisi contoh dari berkas Excel, dan "Kosongkan" menghapus semua isian.
+
+## Contoh hitungan
+
+Contoh bawaan: kategori A (pertanian), KBLI 01111 pertanian jagung, 3 tenaga kerja, upah Rp9.000.000, biaya produksi Rp10.000.000, biaya operasional Rp500.000, dan pendapatan Rp36.000.000.
+
+| Hasil | Nilai | Keterangan |
+|---|---|---|
+| Upah per tenaga kerja | Rp3.000.000 setahun | Di bawah batas Rp12.000.000. Muncul peringatan agar upah dan jumlah tenaga kerja diperiksa kembali, karena setara Rp250.000 per bulan. |
+| Nilai tambah | Rp25.500.000 | Rp36.000.000 dikurangi biaya produksi dan operasional. |
+| Rasio NTB | 70,83% | Masih dalam rentang kategori A, yaitu 51% sampai 94%. |
+| Rasio upah | 35,29% | Di luar rentang 40% sampai 60%. Saran upah: Rp3.422.100 sampai Rp10.266.300. |
 
 ## Aturan pemeriksaan
 
-| Perhitungan | Rumus |
+| Perhitungan | Rumus dan batas |
 |---|---|
-| Upah per tenaga kerja setahun | 26a ÷ tenaga kerja. Wajar bila 12 juta sampai 144 juta. |
-| Total pengeluaran | 26a + 26b + 26c + 26d + 26e. Bila lebih besar dari total pendapatan, komponen terbesar ditandai. |
-| Output | 27a − 26c |
-| Nilai tambah | Output − 26b − 26d |
-| Rasio NTB | Nilai tambah ÷ output. Dibandingkan dengan rentang kategori. |
-| Rasio upah | 26a ÷ nilai tambah. Wajar bila 40% sampai 60%. |
-| Saran upah | Nilai tambah × persentase upah kategori (minimum sampai maksimum). |
-| Saran biaya | Bila rasio NTB di luar rentang: di atas 85% biaya dinaikkan ke rentang saran, selain itu diturunkan. |
-| Klasifikasi usaha | Mikro 1 sampai 4, Kecil 5 sampai 19, Menengah/Besar 20 atau lebih tenaga kerja. |
+| Upah per tenaga kerja setahun | 26a dibagi tenaga kerja. Wajar antara Rp12.000.000 dan Rp144.000.000. |
+| Total pengeluaran | 26a + 26b + 26c + 26d + 26e. Jika melebihi total pendapatan, komponen terbesar ditandai. |
+| Output | 27a - 26c |
+| Nilai tambah | Output - 26b - 26d |
+| Rasio NTB | Nilai tambah dibagi output, dibandingkan dengan rentang kategori. |
+| Rasio upah | 26a dibagi nilai tambah. Wajar antara 40% dan 60%. |
+| Saran upah | Nilai tambah dikali persentase upah kategori, dari batas bawah sampai batas atas. |
+| Saran biaya | Muncul jika rasio NTB di luar rentang. Rasio di atas 85% berarti biaya terlalu kecil, dan aplikasi menyarankan rentang biaya sebagai bagian dari output. Pada rasio 85% atau lebih rendah, biaya disarankan turun. |
+| Klasifikasi usaha | Mikro 1 sampai 4 tenaga kerja, kecil 5 sampai 19, menengah/besar 20 atau lebih. |
+
+Dari 22 kategori KBLI (A sampai V), 20 punya rentang rasio NTB. Kategori P tidak punya rentang dan selalu ditandai di luar rentang, sama seperti di Excel. Kategori V tidak punya batas sama sekali, jadi aplikasi hanya menampilkan catatan.
 
 ## Perbedaan dengan berkas Excel
 
-- Usaha dengan 20 tenaga kerja atau lebih diklasifikasikan **Menengah/Besar**. Di Excel, sel batas maksimumnya kosong sehingga hasilnya "Tidak Valid".
-- Saran saat rasio NTB terlalu rendah untuk biaya pembelian berbunyi "Turunkan Biaya Pembelian Barang dan Jasa". Di Excel tertulis "Turunkan Biaya Operasional" (salah salin).
-- Saran upah tidak ditampilkan bila nilai tambah nol atau negatif. Sebagai gantinya muncul peringatan nilai tambah negatif.
-- Kategori P tidak punya rentang rasio NTB, sehingga selalu ditandai di luar rentang (sama seperti Excel). Kategori V tidak punya batas sama sekali dan diberi catatan.
+Tiga perilaku berbeda dari Excel:
 
-## Pengembangan
+- Usaha dengan 20 tenaga kerja atau lebih diklasifikasikan menengah/besar. Di Excel hasilnya "Tidak Valid" karena sel batas maksimumnya kosong.
+- Saran untuk biaya pembelian saat rasio NTB di luar rentang dan tidak melebihi 85% berbunyi "Turunkan Biaya Pembelian Barang dan Jasa". Di Excel tertulis "Turunkan Biaya Operasional", salah salin dari baris di bawahnya.
+- Saran upah tidak muncul jika nilai tambah nol atau negatif. Sebagai gantinya muncul peringatan nilai tambah negatif.
 
-Dibangun dengan Vue 3, TypeScript, Vite, Tailwind CSS 4, dan [shadcn-vue](https://www.shadcn-vue.com) (gaya `new-york`, dasar `stone`, warna utama teal).
+## Data
 
-```bash
-pnpm install
-pnpm dev          # server pengembangan
-pnpm test         # tes perhitungan (vitest)
-pnpm build        # hasil di dist/
-```
-
-Logika perhitungan ada di `src/lib/ntb.ts` dan tidak bergantung pada Vue. Data kategori, KBLI, dan batas wajar ada di `src/data/ntb-data.json`. Berkas itu dibuat dari berkas Excel dengan:
+`src/data/ntb-data.json` berisi 22 kategori KBLI, 1.559 kode KBLI lima digit, rentang rasio NTB, persentase upah per kategori, dan batas umum. Berkas ini dibuat dari berkas Excel dengan skrip yang hanya membaca master KBLI dan lembar batas wajar:
 
 ```bash
 python3 tools/extract-data.py "/jalur/ke/Kalkulator NTB_SharedV1.1.xlsx"
 ```
 
-Skrip hanya membaca master KBLI dan batas wajar (Sheet2), bukan data responden.
+Skrip tidak membaca isian responden.
 
-## Publikasi ke GitHub Pages
+## Pengembangan
 
-Situs diterbitkan dari cabang `gh-pages`, tanpa GitHub Actions:
+Aplikasi memakai Vue 3, TypeScript, Vite, Tailwind CSS 4, dan [shadcn-vue](https://www.shadcn-vue.com) dengan gaya `new-york`, warna dasar `stone`, dan warna utama teal. Tema terang atau gelap mengikuti pengaturan sistem dan bisa diganti lewat tombol di pojok kanan atas.
+
+```bash
+pnpm install
+pnpm dev        # server pengembangan
+pnpm test       # 11 tes perhitungan (vitest)
+pnpm build      # hasil di dist/
+```
+
+Rumus ada di `src/lib/ntb.ts` dan tidak bergantung pada Vue, sehingga bisa diuji tanpa antarmuka. Penyusunan teks peringatan ada di `src/lib/summary.ts`, dan `src/composables/useNtbCalculator.ts` menghubungkan keduanya ke komponen.
+
+## Menerbitkan ke GitHub Pages
+
+Situs terbit dari cabang `gh-pages`. Cabang itu tidak memerlukan GitHub Actions.
 
 ```bash
 pnpm deploy
 ```
 
-Skrip membangun situs, lalu mendorong isi `dist/` ke cabang `gh-pages` pada remote `origin`. Di pengaturan repositori, sumber Pages adalah cabang `gh-pages`, folder root.
+Skrip membangun situs, lalu mendorong isi `dist/` ke cabang `gh-pages` di remote `origin`. Di pengaturan repositori, sumber Pages adalah cabang `gh-pages` dengan folder root.
 
-## Catatan
+## Batasan
 
-Batas kewajaran berasal dari berkas sumber dan hanya membantu pemeriksaan awal. Keputusan akhir tetap pada petugas.
+Batas kewajaran berasal dari berkas sumber dan dipakai untuk pemeriksaan awal. Petugas tetap memutuskan apakah angka sebuah usaha perlu dikonfirmasi ulang ke responden.
 
+## Lisensi
 
-Lisensi: MIT.
+MIT. Lihat berkas `LICENSE`.
