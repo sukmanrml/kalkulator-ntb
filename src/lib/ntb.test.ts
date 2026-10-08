@@ -79,6 +79,25 @@ describe('calculate', () => {
     expect(calculate({ ...sample, category: 'V' }, ntb).hasThresholds).toBe(false);
   });
 
+  it('does not judge the NTB ratio or suggest costs before a category is chosen', () => {
+    const r = calculate({ ...sample, category: null, kbli: null }, ntb);
+    expect(r.ntbRatio).toBeCloseTo(0.708333, 5);
+    expect(r.ntbStatus).toBeNull();
+    expect(r.ntbRange).toBeNull();
+    expect(r.hasThresholds).toBe(false);
+    expect(r.suggestions).toEqual({});
+  });
+
+  it('accepts a ratio at the edge of the range (reported case: 51,6% in category A, 51% to 94%)', () => {
+    const reported: NtbInput = { ...empty, category: 'A', workers: 10, wages: 61_380_000, production: 15_506_000, operating: 50_514_000, revenue: 136_400_000 };
+    const r = calculate(reported, ntb);
+    expect(r.ntbRatio).toBeCloseTo(0.51598, 5);
+    expect(r.ntbStatus).toBe('in');
+    expect(r.wageStatus).toBe('out'); // 87,21%, above 60%
+    expect(r.sizeClass).toBe('Kecil');
+    expect(calculate({ ...reported, category: 'Q' }, ntb).ntbRange).toEqual([0.27, 0.82]);
+  });
+
   it('does not crash on empty input', () => {
     const r = calculate({ ...empty, category: 'A' }, ntb);
     expect([r.ntbRatio, r.wageRatio, r.wagePerWorker, r.profitLabel]).toEqual([null, null, null, null]);

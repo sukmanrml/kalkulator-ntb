@@ -23,7 +23,7 @@ async function copy() {
   setTimeout(() => (copied.value = 'idle'), 1800);
 }
 
-const rangeText = (r: NtbResult) => (r.ntbRange ? `${pct(r.ntbRange[0])} sampai ${pct(r.ntbRange[1])}` : 'tidak ada batas untuk kategori ini');
+const rangeText = (r: NtbResult) => (r.ntbRange ? `${pct(r.ntbRange[0])} sampai ${pct(r.ntbRange[1])}` : props.input.category ? 'tidak ada batas untuk kategori ini' : 'pilih kategori KBLI terlebih dahulu');
 </script>
 
 <template>

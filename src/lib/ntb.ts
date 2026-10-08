@@ -81,10 +81,12 @@ export function calculate(input: NtbInput, data: NtbData): NtbResult {
   const output = revenue - expenses.purchases;
   const valueAdded = output - expenses.production - expenses.operating;
   const ntbRatio = output !== 0 ? valueAdded / output : null;
-  const ntbRange = data.ntbRange[category ?? ''] ?? null;
-  const hasThresholds = category !== null && category in data.ntbRange;
+  const hasCategory = category !== null && category !== '';
+  const ntbRange = hasCategory ? data.ntbRange[category] ?? null : null;
+  const hasThresholds = hasCategory && category in data.ntbRange;
+  // Without a category there is no range to judge against, so the ratio is not judged at all.
   // A category without a range ("-" in the workbook) is always flagged: text is greater than any number in Excel.
-  const ntbStatus: RatioStatus = ntbRatio === null ? null : ntbRange ? inRange(ntbRatio, ntbRange) : 'out';
+  const ntbStatus: RatioStatus = ntbRatio === null || !hasCategory ? null : ntbRange ? inRange(ntbRatio, ntbRange) : 'out';
   const wageRatio = valueAdded !== 0 ? expenses.wages / valueAdded : null;
   const wageStatus: RatioStatus = wageRatio === null ? null : inRange(wageRatio, data.wageToNtb);
 

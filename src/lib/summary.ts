@@ -9,7 +9,9 @@ export interface Issue {
 /** Everything the member should look at, in the order the workbook shows it. */
 export function collectIssues(result: NtbResult, input: NtbInput): Issue[] {
   const issues: Issue[] = [];
-  if (input.category && !result.hasThresholds) {
+  if (!input.category) {
+    issues.push({ kind: 'info', text: 'Pilih kategori KBLI agar rasio NTB, saran upah, dan saran biaya bisa dinilai.' });
+  } else if (!result.hasThresholds) {
     issues.push({ kind: 'info', text: `Kategori ${input.category} belum punya batas kewajaran di berkas sumber, jadi rasio NTB tidak dapat dinilai.` });
   }
   if (result.warnings.wagePerWorker) issues.push({ kind: 'warning', text: result.warnings.wagePerWorker });
@@ -27,7 +29,7 @@ const statusText = (status: 'in' | 'out' | null) => (status === 'in' ? 'dalam re
 
 /** Plain text for "Salin hasil". */
 export function summaryText(result: NtbResult, input: NtbInput): string {
-  const range = result.ntbRange ? `${pct(result.ntbRange[0])} sampai ${pct(result.ntbRange[1])}` : 'tidak ada batas';
+  const range = result.ntbRange ? `${pct(result.ntbRange[0])} sampai ${pct(result.ntbRange[1])}` : input.category ? 'tidak ada batas' : 'kategori belum dipilih';
   const lines = [
     'KALKULATOR NTB',
     `Kategori: ${input.category ? `${input.category}. ${result.categoryTitle ?? ''}` : '-'}`,
