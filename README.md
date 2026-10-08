@@ -99,7 +99,7 @@ Batas kewajaran berasal dari berkas sumber dan dipakai untuk pemeriksaan awal. P
 
 ## Sumber
 
-- Rumus, batas kewajaran, dan master KBLI berasal dari berkas Excel *Kalkulator NTB_SharedV1.1* buatan BPS Provinsi Sulawesi Tengah. Pembuat berkas, menurut properti berkas: Apriliansyah Mahmud.
+- Rumus, batas kewajaran, dan master KBLI berasal dari berkas Excel *Kalkulator NTB_SharedV1.1* buatan BPS Provinsi Sulawesi Tengah. Penyusun berkas: Apriliansyah Mahmud, S.Tr.Stat.
 - Definisi omzet, output, dan nilai tambah, termasuk rincian 31a untuk usaha baru, berasal dari petunjuk FASIH Pendataan SE 2026 milik Badan Pusat Statistik.
 - Aplikasi web ini alat bantu pemeriksaan dan bukan terbitan resmi BPS.
 
