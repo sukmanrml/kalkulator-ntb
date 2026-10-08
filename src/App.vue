@@ -3,10 +3,11 @@ import { Calculator, ShieldCheck } from '@lucide/vue';
 import { Badge } from '@/components/ui/badge';
 import InputPanel from '@/components/InputPanel.vue';
 import ResultPanel from '@/components/ResultPanel.vue';
+import SuggestionPanel from '@/components/SuggestionPanel.vue';
 import ThemeToggle from '@/components/ThemeToggle.vue';
 import { useNtbCalculator } from '@/composables/useNtbCalculator';
 
-const { input, result, issues, text, started, categoryItems, kbliItems, ntbData, setKbli, setCategory, loadSample, reset } = useNtbCalculator();
+const { input, result, issues, suggestion, commodityItems, text, started, categoryItems, kbliItems, ntbData, setKbli, setCategory, loadSample, reset } = useNtbCalculator();
 </script>
 
 <template>
@@ -24,14 +25,15 @@ const { input, result, issues, text, started, categoryItems, kbliItems, ntbData,
     </header>
 
     <main class="mx-auto grid max-w-6xl items-start gap-5 px-4 py-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <InputPanel v-model="input" :category-items="categoryItems" :kbli-items="kbliItems" @category="setCategory" @kbli="setKbli" @sample="loadSample" @reset="reset" />
-      <div class="lg:sticky lg:top-4">
+      <InputPanel v-model="input" :category-items="categoryItems" :kbli-items="kbliItems" :commodity-items="commodityItems" @category="setCategory" @kbli="setKbli" @sample="loadSample" @reset="reset" />
+      <div class="grid gap-5">
         <ResultPanel :result="result" :input="input" :issues="issues" :text="text" :started="started" :data="ntbData" />
+        <SuggestionPanel v-if="started" :suggestion="suggestion" :input="input" />
       </div>
     </main>
 
     <footer class="no-print mx-auto max-w-6xl px-4 pb-10 text-sm text-muted-foreground">
-      <p>Rumus dan batas kewajaran bersumber dari berkas Kalkulator NTB_SharedV1.1 milik BPS Provinsi Sulawesi Tengah. Definisi omzet, output, dan nilai tambah mengikuti petunjuk FASIH Pendataan SE 2026. Alat ini membantu pemeriksaan awal dan bukan terbitan resmi BPS. Angka tidak dikirim atau disimpan di mana pun.</p>
+      <p>Rumus dan batas kewajaran bersumber dari berkas Kalkulator NTB_SharedV1.1 milik BPS Provinsi Sulawesi Tengah. Definisi omzet, output, dan nilai tambah mengikuti petunjuk FASIH Pendataan SE 2026. Saran nilai inputan mengikuti Kalkulator NTB Sumatera Utara V.1.1 milik BPS Provinsi Sumatera Utara. Alat ini membantu pemeriksaan awal dan bukan terbitan resmi BPS. Angka tidak dikirim atau disimpan di mana pun.</p>
     </footer>
   </div>
 </template>

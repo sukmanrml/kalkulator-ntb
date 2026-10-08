@@ -10,7 +10,7 @@ import type { NtbInput } from '@/types/ntb';
 import MoneyField from './MoneyField.vue';
 import SearchableSelect, { type SelectItem } from './SearchableSelect.vue';
 
-defineProps<{ categoryItems: SelectItem[]; kbliItems: SelectItem[] }>();
+defineProps<{ categoryItems: SelectItem[]; kbliItems: SelectItem[]; commodityItems: SelectItem[] }>();
 const input = defineModel<NtbInput>({ required: true });
 defineEmits<{ category: [code: string | null]; kbli: [code: string | null]; sample: []; reset: [] }>();
 
@@ -43,6 +43,10 @@ function onWorkers(event: Event) {
         <div class="grid gap-1.5">
           <Label class="font-normal">KBLI 5 digit</Label>
           <SearchableSelect :model-value="input.kbli" :items="kbliItems" placeholder="Pilih KBLI" search-placeholder="Cari kode atau nama usaha, mis. 47111" @update:model-value="$emit('kbli', $event)" />
+        </div>
+        <div v-if="input.category === 'A'" class="grid gap-1.5">
+          <Label class="font-normal">Komoditas kategori A <span class="text-muted-foreground">untuk work in progress</span></Label>
+          <SearchableSelect v-model="input.commodity" :items="commodityItems" placeholder="Pilih komoditas" search-placeholder="Cari komoditas" />
         </div>
         <div class="grid gap-1.5">
           <Label for="workers" class="font-normal">Banyaknya tenaga kerja</Label>

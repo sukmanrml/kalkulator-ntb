@@ -33,6 +33,14 @@ export interface NtbData {
   costShare: Record<CostShareKey, Range>;
 }
 
+/** Sub-category of category A (komoditas), used for work in progress. */
+export interface Commodity {
+  id: string;
+  label: string;
+  /** Work in progress as a share of the suggested revenue. */
+  wipShare: number;
+}
+
 /** The expense lines 26a to 26e of the questionnaire. */
 export type ExpenseKey = 'wages' | 'production' | 'purchases' | 'operating' | 'nonOperating';
 
@@ -40,6 +48,8 @@ export interface NtbInput {
   category: string | null;
   kbli: string | null;
   workers: number | null;
+  /** Commodity of a category A business; null for other categories. */
+  commodity: string | null;
   /** 26a: wages, salaries and social security */
   wages: number | null;
   /** 26b */

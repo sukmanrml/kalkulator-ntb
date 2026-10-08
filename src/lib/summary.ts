@@ -1,5 +1,6 @@
 import type { NtbInput, NtbResult } from '@/types/ntb';
 import { pct, rp } from './ntb';
+import { suggestionRows, type Suggestion } from './suggest';
 
 export interface Issue {
   kind: 'warning' | 'tip' | 'info';
@@ -28,7 +29,7 @@ export function collectIssues(result: NtbResult, input: NtbInput): Issue[] {
 const statusText = (status: 'in' | 'out' | null) => (status === 'in' ? 'dalam rentang' : 'di luar rentang');
 
 /** Plain text for "Salin hasil". */
-export function summaryText(result: NtbResult, input: NtbInput): string {
+export function summaryText(result: NtbResult, input: NtbInput, suggestion?: Suggestion): string {
   const range = result.ntbRange ? `${pct(result.ntbRange[0])} sampai ${pct(result.ntbRange[1])}` : input.category ? 'tidak ada batas' : 'kategori belum dipilih';
   const lines = [
     'KALKULATOR NTB',
@@ -46,5 +47,8 @@ export function summaryText(result: NtbResult, input: NtbInput): string {
   ];
   const issues = collectIssues(result, input);
   if (issues.length) lines.push('', 'Perlu diperiksa:', ...issues.map((i) => `- ${i.text}`));
+  const rows = suggestion ? suggestionRows(suggestion, input) : [];
+  if (rows.length) lines.push('', 'Saran nilai inputan (batas bawah sampai batas atas):', ...rows.map((r) => `- ${r.label}: ${rp(r.low)} sampai ${rp(r.high)}`));
+  if (suggestion?.recommendation) lines.push(`Rekomendasi: ${suggestion.recommendation}`);
   return lines.join('\n');
 }

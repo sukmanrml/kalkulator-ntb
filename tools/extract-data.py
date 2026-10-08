@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Build data/ntb-data.json from the "Kalkulator NTB" workbook.
 
-Usage: python3 tools/extract-data.py "/path/to/Kalkulator NTB_SharedV1.1.xlsx"
-Reads the KBLI master and the thresholds of Sheet2. No respondent data is read.
+Usage: python3 tools/extract-data.py "/path/to/Kalkulator NTB_SharedV1.1.xlsx" ["/path/to/Kalkulator NTB Sumatera Utara_V.1.1.xlsx"]
+Reads the KBLI master and the thresholds of Sheet2. The optional second file is the Sumatera Utara
+version: its sheet Threshold (columns H to J) holds the same NTB ratio ranges at full precision,
+which replace the two-decimal ranges of the first file. No respondent data is read.
 """
 import json
 import sys
@@ -39,6 +41,18 @@ for r in range(2, 23):
     if wcat:
         wage_percent[wcat] = [num(s2.cell(r, c).value) for c in (23, 24, 25)]
 
+# Full-precision ranges from the Sumatera Utara workbook (columns H:J of sheet Threshold)
+if len(sys.argv) > 2:
+    with open(sys.argv[2], 'rb') as handle:
+        threshold = openpyxl.load_workbook(handle, data_only=True)['Threshold']
+    for r in range(3, 40):
+        label, lo, hi = (threshold.cell(r, c).value for c in (8, 9, 10))
+        if isinstance(label, str) and label.startswith('Kategori ') and isinstance(lo, (int, float)) and isinstance(hi, (int, float)):
+            cat = label.split()[-1]
+            # (0, 0) means "no range" there; keep what the first workbook says
+            if (lo, hi) != (0, 0) and cat in ntb_range:
+                ntb_range[cat] = [lo, hi]
+
 data = {
     'categories': categories,
     'kbli': kbli,
@@ -57,6 +71,6 @@ data = {
         'nonOperasional': [num(s2['AH3'].value), num(s2['AI3'].value)],
     },
 }
-with open('data/ntb-data.json', 'w', encoding='utf-8') as f:
+with open('src/data/ntb-data.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
 print(len(categories), 'categories,', len(kbli), 'KBLI codes,', len(ntb_range), 'NTB ranges')

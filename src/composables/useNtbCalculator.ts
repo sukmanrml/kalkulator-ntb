@@ -1,24 +1,28 @@
 import { computed, ref } from 'vue';
 import data from '@/data/ntb-data.json';
+import extra from '@/data/sumut-extra.json';
 import { calculate } from '@/lib/ntb';
+import { suggestInputs } from '@/lib/suggest';
 import { collectIssues, summaryText } from '@/lib/summary';
-import type { NtbData, NtbInput } from '@/types/ntb';
+import type { Commodity, NtbData, NtbInput } from '@/types/ntb';
 
 const ntbData = data as unknown as NtbData;
+const commodities = extra.commodities as Commodity[];
 
 const EMPTY: NtbInput = {
-  category: null, kbli: null, workers: null, wages: null, production: null, purchases: null, operating: null, nonOperating: null, revenue: null, startedThisYear: false, monthlyRevenue: null, otherRevenue: null,
+  category: null, kbli: null, workers: null, commodity: null, wages: null, production: null, purchases: null, operating: null, nonOperating: null, revenue: null, startedThisYear: false, monthlyRevenue: null, otherRevenue: null,
 };
 
 // The sample of the original workbook.
-const SAMPLE: NtbInput = { ...EMPTY, category: 'A', kbli: '01111', workers: 3, wages: 9_000_000, production: 10_000_000, operating: 500_000, revenue: 36_000_000 };
+const SAMPLE: NtbInput = { ...EMPTY, category: 'A', kbli: '01111', workers: 3, commodity: 'semusim', wages: 9_000_000, production: 10_000_000, operating: 500_000, revenue: 36_000_000 };
 
 export function useNtbCalculator() {
   const input = ref<NtbInput>({ ...EMPTY });
 
   const result = computed(() => calculate(input.value, ntbData));
   const issues = computed(() => collectIssues(result.value, input.value));
-  const text = computed(() => summaryText(result.value, input.value));
+  const suggestion = computed(() => suggestInputs(input.value, result.value, commodities));
+  const text = computed(() => summaryText(result.value, input.value, suggestion.value));
   const started = computed(() => Object.values(input.value).some((v) => v !== null && v !== 0));
 
   const categoryItems = ntbData.categories.map((c) => ({ value: c.code, label: c.title }));
@@ -30,16 +34,22 @@ export function useNtbCalculator() {
   function setKbli(code: string | null) {
     input.value.kbli = code;
     const item = ntbData.kbli.find((k) => k.c === code);
-    if (item) input.value.category = item.k;
+    if (item) {
+      input.value.category = item.k;
+      if (item.k !== 'A') input.value.commodity = null;
+    }
   }
 
   function setCategory(code: string | null) {
     input.value.category = code;
+    if (code !== 'A') input.value.commodity = null;
     if (input.value.kbli && ntbData.kbli.find((k) => k.c === input.value.kbli)?.k !== code) input.value.kbli = null;
   }
 
   const loadSample = () => { input.value = { ...SAMPLE }; };
   const reset = () => { input.value = { ...EMPTY }; };
 
-  return { input, result, issues, text, started, categoryItems, kbliItems, ntbData, setKbli, setCategory, loadSample, reset };
+  const commodityItems = commodities.map((c) => ({ value: c.id, label: c.label }));
+
+  return { input, result, issues, suggestion, commodityItems, text, started, categoryItems, kbliItems, ntbData, setKbli, setCategory, loadSample, reset };
 }

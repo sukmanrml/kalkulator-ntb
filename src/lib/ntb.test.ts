@@ -4,7 +4,7 @@ import type { NtbData, NtbInput } from '@/types/ntb';
 import { calculate, pct, rp, sizeClass } from './ntb';
 
 const ntb = data as unknown as NtbData;
-const empty: NtbInput = { category: null, kbli: null, workers: null, wages: null, production: null, purchases: null, operating: null, nonOperating: null, revenue: null, startedThisYear: false, monthlyRevenue: null, otherRevenue: null };
+const empty: NtbInput = { category: null, kbli: null, workers: null, commodity: null, wages: null, production: null, purchases: null, operating: null, nonOperating: null, revenue: null, startedThisYear: false, monthlyRevenue: null, otherRevenue: null };
 // The sample in the workbook: category A, KBLI 01111, 3 workers, 26a 9.000.000, 26b 10.000.000, 26d 500.000, 27a 36.000.000.
 const sample: NtbInput = { ...empty, category: 'A', kbli: '01111', workers: 3, wages: 9_000_000, production: 10_000_000, operating: 500_000, revenue: 36_000_000 };
 
@@ -102,7 +102,9 @@ describe('calculate', () => {
     expect(r.ntbStatus).toBe('in');
     expect(r.wageStatus).toBe('out'); // 87,21%, above 60%
     expect(r.sizeClass).toBe('Kecil');
-    expect(calculate({ ...reported, category: 'Q' }, ntb).ntbRange).toEqual([0.27, 0.82]);
+    expect(calculate({ ...reported, category: 'Q' }, ntb).ntbRange).toEqual(ntb.ntbRange.Q);
+    expect(ntb.ntbRange.Q![0]).toBeCloseTo(0.27, 2);
+    expect(ntb.ntbRange.Q![1]).toBeCloseTo(0.82, 2);
   });
 
   it('uses 31a x 12 as omzet for a business that started in 2026', () => {
