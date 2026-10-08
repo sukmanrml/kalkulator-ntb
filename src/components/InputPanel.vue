@@ -1,0 +1,72 @@
+<script setup lang="ts">
+import { FlaskConical, RotateCcw } from '@lucide/vue';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import type { NtbInput } from '@/types/ntb';
+import MoneyField from './MoneyField.vue';
+import SearchableSelect, { type SelectItem } from './SearchableSelect.vue';
+
+defineProps<{ categoryItems: SelectItem[]; kbliItems: SelectItem[] }>();
+const input = defineModel<NtbInput>({ required: true });
+defineEmits<{ category: [code: string | null]; kbli: [code: string | null]; sample: []; reset: [] }>();
+
+const workersText = (value: number | null) => (value === null ? '' : String(value));
+function onWorkers(event: Event) {
+  const digits = (event.target as HTMLInputElement).value.replace(/\D/g, '');
+  (event.target as HTMLInputElement).value = digits;
+  input.value.workers = digits ? Number(digits) : null;
+}
+</script>
+
+<template>
+  <Card>
+    <CardHeader>
+      <CardTitle>Data usaha</CardTitle>
+      <CardDescription>Isi sesuai kuesioner. Semua angka dalam rupiah setahun.</CardDescription>
+      <div class="col-start-1 mt-1 flex gap-2 sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:mt-0 sm:justify-self-end">
+        <Button type="button" variant="outline" size="sm" @click="$emit('sample')"><FlaskConical aria-hidden="true" /> Isi contoh</Button>
+        <Button type="button" variant="ghost" size="sm" @click="$emit('reset')"><RotateCcw aria-hidden="true" /> Kosongkan</Button>
+      </div>
+    </CardHeader>
+
+    <CardContent class="grid gap-6">
+      <section class="grid gap-4" aria-labelledby="identitas">
+        <h3 id="identitas" class="text-sm font-semibold text-primary">Identitas usaha</h3>
+        <div class="grid gap-1.5">
+          <Label class="font-normal">Kategori KBLI</Label>
+          <SearchableSelect :model-value="input.category" :items="categoryItems" placeholder="Pilih kategori" search-placeholder="Cari kategori, mis. G atau perdagangan" @update:model-value="$emit('category', $event)" />
+        </div>
+        <div class="grid gap-1.5">
+          <Label class="font-normal">KBLI 5 digit</Label>
+          <SearchableSelect :model-value="input.kbli" :items="kbliItems" placeholder="Pilih KBLI" search-placeholder="Cari kode atau nama usaha, mis. 47111" @update:model-value="$emit('kbli', $event)" />
+        </div>
+        <div class="grid gap-1.5">
+          <Label for="workers" class="font-normal">Banyaknya tenaga kerja</Label>
+          <Input id="workers" inputmode="numeric" placeholder="mis. 3" :model-value="workersText(input.workers)" @input="onWorkers" />
+        </div>
+      </section>
+
+      <Separator />
+
+      <section class="grid gap-4" aria-labelledby="pengeluaran">
+        <h3 id="pengeluaran" class="text-sm font-semibold text-primary">Pengeluaran usaha <span class="font-normal text-muted-foreground">Rincian 26</span></h3>
+        <MoneyField v-model="input.wages" label="26a. Total upah dan gaji, serta jaminan sosial petugas" />
+        <MoneyField v-model="input.production" label="26b. Biaya produksi" />
+        <MoneyField v-model="input.purchases" label="26c. Biaya pembelian barang yang terjual" />
+        <MoneyField v-model="input.operating" label="26d. Biaya operasional" />
+        <MoneyField v-model="input.nonOperating" label="26e. Biaya non operasional" />
+      </section>
+
+      <Separator />
+
+      <section class="grid gap-4" aria-labelledby="pendapatan">
+        <h3 id="pendapatan" class="text-sm font-semibold text-primary">Pendapatan usaha <span class="font-normal text-muted-foreground">Rincian 27</span></h3>
+        <MoneyField v-model="input.revenue" label="27a. Nilai produksi, penjualan, atau pendapatan barang dan jasa" />
+        <MoneyField v-model="input.otherRevenue" label="27b. Pendapatan lainnya" />
+      </section>
+    </CardContent>
+  </Card>
+</template>
