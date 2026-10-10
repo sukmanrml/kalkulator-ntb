@@ -7,6 +7,9 @@ export const HIGH_RATIO = 0.85;
 const isNum = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 const n = (value: number | null | undefined) => (isNum(value) ? value : 0);
 
+/** A business that started in 2026 reports monthly figures (31a and the 26 lines). The workbook works in years. */
+export const periodFactor = (input: Pick<NtbInput, 'startedThisYear'>) => (input.startedThisYear ? 12 : 1);
+
 /** "Rp1.234.567", like TEXT(x, "#.##0") in an Indonesian Excel. */
 export function rp(value: number): string {
   return `Rp${Math.round(value).toLocaleString('id-ID')}`;
@@ -41,8 +44,11 @@ const COST_SUGGESTIONS = [
 
 export function calculate(input: NtbInput, data: NtbData): NtbResult {
   const { workers, category } = input;
+  // Rincian 26 is yearly, or monthly (x 12) for a business that started operating in 2026.
+  const factor = periodFactor(input);
   const expenses: Record<ExpenseKey, number> = {
-    wages: n(input.wages), production: n(input.production), purchases: n(input.purchases), operating: n(input.operating), nonOperating: n(input.nonOperating),
+    wages: n(input.wages) * factor, production: n(input.production) * factor, purchases: n(input.purchases) * factor,
+    operating: n(input.operating) * factor, nonOperating: n(input.nonOperating) * factor,
   };
   // Omzet (FASIH SE2026): 27a, or 31a x 12 for a business that started operating in 2026.
   const revenue = input.startedThisYear ? n(input.monthlyRevenue) * 12 : n(input.revenue);

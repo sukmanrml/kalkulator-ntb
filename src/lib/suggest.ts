@@ -1,7 +1,7 @@
 // "Saran nilai inputan" from the Sumatera Utara version of the calculator: which values to enter in FASIH
 // so that the NTB ratio falls inside the category range.
 import type { Commodity, NtbInput, NtbResult } from '@/types/ntb';
-import { rp } from './ntb';
+import { periodFactor, rp } from './ntb';
 
 export interface Bounds {
   low: number;
@@ -30,9 +30,10 @@ export function suggestInputs(input: NtbInput, result: NtbResult, commodities: C
   if (!range) return none;
 
   const [lowRatio, highRatio] = range;
-  const production = input.production ?? 0;
-  const operating = input.operating ?? 0;
-  const purchases = input.purchases ?? 0;
+  const factor = periodFactor(input);
+  const production = (input.production ?? 0) * factor;
+  const operating = (input.operating ?? 0) * factor;
+  const purchases = (input.purchases ?? 0) * factor;
   const inner = production + operating;
 
   // A ratio of 1 or more cannot be reached by any revenue.
@@ -79,6 +80,11 @@ export function suggestionRows(s: Suggestion, input: NtbInput): SuggestionRow[] 
   }
   if (s.wip) rows.push({ label: `Work in progress, ${s.wip.label} (${Math.round(s.wip.share * 100)}%)`, low: s.wip.low, high: s.wip.high });
   if (s.fasihTotal) rows.push({ label: 'Total pendapatan (input FASIH)', bold: true, low: s.fasihTotal.low, high: s.fasihTotal.high });
-  if (s.costs) rows.push({ label: 'Total biaya produksi + biaya operasional (26b + 26d)', low: s.costs.low, high: s.costs.high });
+  if (s.costs) rows.push({
+    label: input.startedThisYear ? 'Total biaya produksi + biaya operasional setahun (26b + 26d × 12)' : 'Total biaya produksi + biaya operasional (26b + 26d)',
+    low: s.costs.low,
+    high: s.costs.high,
+    note: input.startedThisYear ? `Sebulan: ${rp(s.costs.low / 12)} sampai ${rp(s.costs.high / 12)}` : undefined,
+  });
   return rows;
 }

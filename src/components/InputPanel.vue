@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
+import { computed } from 'vue';
 import type { NtbInput } from '@/types/ntb';
 import MoneyField from './MoneyField.vue';
 import SearchableSelect, { type SelectItem } from './SearchableSelect.vue';
@@ -13,6 +14,9 @@ import SearchableSelect, { type SelectItem } from './SearchableSelect.vue';
 defineProps<{ categoryItems: SelectItem[]; kbliItems: SelectItem[]; commodityItems: SelectItem[] }>();
 const input = defineModel<NtbInput>({ required: true });
 defineEmits<{ category: [code: string | null]; kbli: [code: string | null]; sample: []; reset: [] }>();
+
+/** Rincian 26 is filled per month for a business that started in 2026. */
+const unit = computed(() => (input.value.startedThisYear ? ' (sebulan)' : ''));
 
 const workersText = (value: number | null) => (value === null ? '' : String(value));
 function onWorkers(event: Event) {
@@ -58,11 +62,11 @@ function onWorkers(event: Event) {
 
       <section class="grid gap-4" aria-labelledby="pengeluaran">
         <h3 id="pengeluaran" class="text-sm font-semibold text-primary">Pengeluaran usaha <span class="font-normal text-muted-foreground">Rincian 26</span></h3>
-        <MoneyField v-model="input.wages" label="26a. Total upah dan gaji, serta jaminan sosial petugas" />
-        <MoneyField v-model="input.production" label="26b. Biaya produksi" />
-        <MoneyField v-model="input.purchases" label="26c. Biaya pembelian barang yang terjual" />
-        <MoneyField v-model="input.operating" label="26d. Biaya operasional" />
-        <MoneyField v-model="input.nonOperating" label="26e. Biaya non operasional" />
+        <MoneyField v-model="input.wages" :label="`26a. Total upah dan gaji, serta jaminan sosial petugas${unit}`" />
+        <MoneyField v-model="input.production" :label="`26b. Biaya produksi${unit}`" />
+        <MoneyField v-model="input.purchases" :label="`26c. Biaya pembelian barang yang terjual${unit}`" />
+        <MoneyField v-model="input.operating" :label="`26d. Biaya operasional${unit}`" />
+        <MoneyField v-model="input.nonOperating" :label="`26e. Biaya non operasional${unit}`" />
       </section>
 
       <Separator />
@@ -73,7 +77,7 @@ function onWorkers(event: Event) {
           <Switch id="started-this-year" v-model="input.startedThisYear" class="mt-0.5" />
           <div class="grid gap-0.5">
             <Label for="started-this-year" class="leading-snug">Usaha mulai beroperasi tahun 2026</Label>
-            <p class="text-xs text-muted-foreground">Omzet dihitung dari rincian 31a dikali 12, bukan dari 27a.</p>
+            <p class="text-xs text-muted-foreground">Omzet memakai rincian 31a dan semua pengeluaran rincian 26 diisi per bulan. Aplikasi mengalikannya dengan 12.</p>
           </div>
         </div>
         <MoneyField v-if="input.startedThisYear" v-model="input.monthlyRevenue" label="31a. Nilai produksi, penjualan, atau pendapatan barang dan jasa sebulan" />

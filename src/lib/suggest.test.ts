@@ -62,4 +62,13 @@ describe('suggestInputs', () => {
     expect(suggest({ ...empty, category: 'A', production: 1_000_000, revenue: 3_000_000 }).recommendation).toBe('Tidak ada, sudah sesuai batas.');
     expect(suggest({ ...empty, category: 'A', production: 1_000_000, revenue: 1_100_000 }).recommendation).toMatch(/^Periksa kembali digitasi/);
   });
+
+  it('annualizes the monthly costs of a business that started in 2026', () => {
+    const base = { ...empty, category: 'A', commodity: 'semusim', production: 1_000_000 } as NtbInput;
+    const yearly = suggestInputs(base, calculate(base, ntb), commodities);
+    const monthly = { ...base, startedThisYear: true } as NtbInput;
+    const s = suggestInputs(monthly, calculate(monthly, ntb), commodities);
+    expect(Math.round(s.revenue!.low)).toBe(Math.round(yearly.revenue!.low * 12));
+    expect(Math.round(s.revenue!.high)).toBe(Math.round(yearly.revenue!.high * 12));
+  });
 });

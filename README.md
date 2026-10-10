@@ -11,7 +11,7 @@ Perhitungan berjalan di peramban Anda. Angka yang diisi tidak dikirim ke server 
 ## Cara memakai
 
 1. Pilih kategori KBLI dan KBLI 5 digit. Kedua daftar bisa dicari dengan kode atau kata, misalnya `47111` atau `jagung`. Memilih KBLI mengisi kategorinya.
-2. Isi banyaknya tenaga kerja, pengeluaran (rincian 26a sampai 26e), dan pendapatan (27a dan 27b). Semua angka dalam rupiah setahun. Untuk usaha yang mulai beroperasi tahun 2026, nyalakan saklar "Usaha mulai beroperasi tahun 2026" lalu isi rincian 31a (nilai sebulan). Aplikasi mengalikannya dengan 12.
+2. Isi banyaknya tenaga kerja, pengeluaran (rincian 26a sampai 26e), dan pendapatan (27a dan 27b). Semua angka dalam rupiah setahun. Untuk usaha yang mulai beroperasi tahun 2026, nyalakan saklar "Usaha mulai beroperasi tahun 2026" lalu isi rincian 31a dan semua rincian 26 dengan nilai sebulan. Aplikasi mengalikannya dengan 12.
 3. Untuk kategori A, pilih komoditasnya (tanaman semusim, tanaman tahunan, atau ternak besar dan kecil). Pilihan ini dipakai untuk menghitung work in progress.
 4. Baca hasilnya di panel kanan. Hasil berubah setiap kali Anda mengetik. Tombol "Salin hasil" menyalin ringkasannya sebagai teks, misalnya untuk ditempel ke catatan pemeriksaan.
 
@@ -32,7 +32,7 @@ Contoh bawaan: kategori A (pertanian), KBLI 01111 pertanian jagung, 3 tenaga ker
 
 Definisi mengikuti petunjuk di FASIH Pendataan SE 2026 (Badan Pusat Statistik).
 
-- **Omzet** adalah nilai produksi, penjualan, atau pendapatan barang dan jasa. Untuk usaha yang beroperasi sebelum 2026, nilainya rincian 27a. Untuk usaha yang mulai beroperasi tahun 2026, nilainya rincian 31a dikali 12.
+- **Omzet** adalah nilai produksi, penjualan, atau pendapatan barang dan jasa. Untuk usaha yang beroperasi sebelum 2026, nilainya rincian 27a. Untuk usaha yang mulai beroperasi tahun 2026, nilainya rincian 31a dikali 12, dan rincian 26a sampai 26e juga diisi per bulan lalu dikali 12.
 - **Output** adalah omzet dikurangi biaya pembelian barang yang terjual (26c).
 - **Nilai tambah** adalah omzet dikurangi biaya produksi (26b), biaya pembelian barang yang terjual (26c), dan biaya operasional (26d). Biaya pembelian dikurangkan satu kali, lewat output. Hasilnya sama dengan rumus berkas Excel.
 
@@ -73,7 +73,7 @@ Perilaku yang berbeda dari berkas Excel:
 
 - Usaha dengan 20 tenaga kerja atau lebih diklasifikasikan menengah/besar. Di Excel hasilnya "Tidak Valid" karena sel batas maksimumnya kosong.
 - Saran untuk biaya pembelian saat rasio NTB di luar rentang dan tidak melebihi 85% berbunyi "Turunkan Biaya Pembelian Barang dan Jasa". Di Excel tertulis "Turunkan Biaya Operasional", salah salin dari baris di bawahnya.
-- Aplikasi menyediakan saklar untuk usaha yang mulai beroperasi tahun 2026, dengan omzet dari rincian 31a dikali 12. Berkas Excel hanya punya rincian 27a. Arti 31a diambil dari definisi omzet di FASIH.
+- Aplikasi menyediakan saklar untuk usaha yang mulai beroperasi tahun 2026, dengan omzet dari rincian 31a dan pengeluaran rincian 26 yang diisi per bulan, semuanya dikali 12. Berkas Excel hanya punya rincian 27a. Arti 31a diambil dari definisi omzet di FASIH.
 - Pada saran nilai pendapatan, berkas Sumatera Utara hanya membagi biaya produksi dengan (1 − rasio) lalu menambahkan biaya operasional. Hasilnya hanya tepat di batas rasio jika biaya operasional nol. Aplikasi ini membagi biaya produksi dan biaya operasional bersama, dan hasilnya sama dengan berkas itu pada contoh di atas.
 - Pada saran biaya untuk kategori G, berkas Sumatera Utara memasukkan biaya pembelian ke total biaya. Aplikasi ini menghitung biaya produksi dan operasional dari output, jadi pembelian tidak ikut.
 - Rumus nilai tambah berkas Sumatera Utara (pendapatan dikurangi biaya produksi dan operasional) tidak mengurangi biaya pembelian (26c). Aplikasi ini memakai definisi FASIH: pendapatan dikurangi 26b, 26c, dan 26d.

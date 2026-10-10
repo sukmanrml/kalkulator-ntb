@@ -108,11 +108,14 @@ describe('calculate', () => {
   });
 
   it('uses 31a x 12 as omzet for a business that started in 2026', () => {
-    const started = { ...sample, startedThisYear: true, monthlyRevenue: 3_000_000, revenue: 99_000_000 }; // 27a is ignored
+    // Monthly figures: 26a 750.000, 26b 1.000.000, 26d 50.000 and 31a 3.000.000. 27a is ignored.
+    const started = { ...sample, startedThisYear: true, wages: 750_000, production: 1_000_000, operating: 50_000, monthlyRevenue: 3_000_000, revenue: 99_000_000 };
     const r = calculate(started, ntb);
     expect(r.turnover).toBe(36_000_000);
     expect(r.output).toBe(36_000_000);
-    expect(r.valueAdded).toBe(25_500_000);
+    expect(r.valueAdded).toBe(23_400_000); // 36.000.000 - 12.000.000 - 600.000
+    expect(r.totalExpense).toBe(21_600_000); // (750.000 + 1.000.000 + 50.000) x 12
+    expect(r.wagePerWorker).toBe(3_000_000); // 9.000.000 a year over 3 workers
     expect(r.totalRevenue).toBe(36_000_000);
     expect(calculate({ ...started, otherRevenue: 1_000_000 }, ntb).totalRevenue).toBe(37_000_000);
     expect(calculate({ ...sample, startedThisYear: false, monthlyRevenue: 5 }, ntb).turnover).toBe(36_000_000); // 31a is ignored
